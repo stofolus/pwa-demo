@@ -1,0 +1,17 @@
+.alert-box {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.alert-box.alert-level-success {
+  background-color: darkgreen;
+}
+
+.alert-box.alert-level-warning {
+  background-color: darkorange;
+}
+
+.alert-box.alert-level-error {
+  background-color: darkred;
+}
