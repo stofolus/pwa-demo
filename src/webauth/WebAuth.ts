@@ -2,7 +2,7 @@ import { User } from "../database/UserStorage";
 
 export class WebAuth {
   static async create(user: User) {
-    const credential = await navigator.credentials.create({
+    const options: CredentialCreationOptions = {
       publicKey: {
         challenge: Uint8Array.from(getSecureString(), c => c.charCodeAt(0)),
         rp: {
@@ -19,10 +19,16 @@ export class WebAuth {
           authenticatorAttachment: "cross-platform"
         },
         timeout: 60000,
-        attestation: "direct"
+        attestation: "none"
       }
-    });
-    console.log(credential)
+    }
+    console.log(options)
+    try {
+      const credential = await navigator.credentials.create(options);
+      console.log(credential)
+    } catch(e) {
+      console.error(e);
+    }
   }
 }
 
