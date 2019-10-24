@@ -1,6 +1,7 @@
 import { Database } from "./Database";
 
-interface User {
+export interface User {
+  id: string;
   name: string;
   password: string;
 }
@@ -16,12 +17,17 @@ class UserStorageImpl {
     return users;
   }
 
-  addUser(user: User) {
+  addUser(user: Omit<User, "id">) {
     if (this.getUser(user.name)) {
       return false;
     }
     const users = this.getAllUsers();
-    users.push(user);
+    users.push({
+      ...user,
+      id: Math.random()
+        .toString(36)
+        .substr(2, 9)
+    });
     Database.set(this.STORAGE_KEY, users);
   }
   private getUser(username: string): User | null {
