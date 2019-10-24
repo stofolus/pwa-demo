@@ -1,14 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { Alert, ALERT_LEVEL } from "../components/Alert";
 import { UserStorage } from "../database/UserStorage";
 import { useHistory } from "react-router";
 import { ROUTE } from "../Router";
+import { ApplicationContext } from "../App";
 
 export function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const history = useHistory();
+  const context = useContext(ApplicationContext);
 
   const onSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -16,13 +18,15 @@ export function Login() {
       if (username.length <= 0 || password.length <= 0) {
         return;
       }
-      if (!UserStorage.login(username, password)) {
+      const user = UserStorage.login(username, password);
+      if (!user) {
         setError(true);
         return;
       }
-      history.push(ROUTE.REGISTER_DONE);
+      context.setState({...context.state, user: user});
+      history.push(ROUTE.HOME);
     },
-    [username, password, history]
+    [username, password, history, context]
   );
 
   return (
